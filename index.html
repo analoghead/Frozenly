@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frozenly — Frozen Fresh, Made Honest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --teal:     #0C4A46;
+  --teal-mid: #1A6B65;
+  --teal-lt:  #2A8A82;
+  --mint:     #3CBFA3;
+  --mint-lt:  #A8E4D8;
+  --mint-xlt: #D4F2EC;
+  --ice:      #E2F5F2;
+  --cream:    #F8FCF9;
+  --warm:     #F5924E;
+  --warm-lt:  #FDE8D5;
+  --dark:     #0D1E1C;
+  --gray:     #587F7A;
+  --gray-lt:  #C5DAD8;
+  --white:    #FFFFFF;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CUSTOM CURSOR ── */
+.cursor {
+  width: 12px; height: 12px;
+  background: var(--mint);
+  border-radius: 50%;
+  position: fixed; pointer-events: none;
+  z-index: 9999; transition: transform 0.15s ease;
+  transform: translate(-50%, -50%);
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--mint);
+  border-radius: 50%;
+  position: fixed; pointer-events: none;
+  z-index: 9998; transition: all 0.08s ease;
+  transform: translate(-50%, -50%);
+  opacity: 0.5;
+}
+body:hover .cursor { opacity: 1; }
+
+/* ── REVEAL ANIMATION ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 3rem;
+  transition: background 0.4s, box-shadow 0.4s, padding 0.4s;
+}
+nav.scrolled {
+  background: rgba(12, 74, 70, 0.97);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+  padding: 0.9rem 3rem;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800;
+  color: var(--white); letter-spacing: -0.03em; text-decoration: none;
+}
+.nav-logo-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--mint); display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.nav-logo span { color: var(--mint); }
+.nav-links { display: flex; align-items: center; gap: 2rem; }
+.nav-links a {
+  color: rgba(255,255,255,0.75); font-size: 0.88rem; text-decoration: none;
+  font-weight: 400; transition: color 0.2s; letter-spacing: 0.01em;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  background: var(--mint); color: var(--teal) !important;
+  padding: 0.55rem 1.3rem; border-radius: 999px; font-weight: 500 !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+}
+.nav-cta:hover { transform: scale(1.04) !important; box-shadow: 0 4px 20px rgba(60,191,163,0.4) !important; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--teal);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 8rem 2rem 5rem;
+  text-align: center;
+}
+
+.hero-canvas {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(60,191,163,0.18) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+  50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.08); }
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--mint-lt); font-size: 0.78rem; font-weight: 400;
+  padding: 0.45rem 1.1rem; border-radius: 999px;
+  margin-bottom: 1.8rem; letter-spacing: 0.05em;
+  animation: fadeDown 0.8s ease both;
+}
+.hero-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--mint); animation: blink 1.8s ease infinite;
+}
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity: 0.3; } }
+@keyframes fadeDown { from { opacity:0; transform: translateY(-16px); } to { opacity:1; transform:none; } }
+
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.0;
+  letter-spacing: -0.04em;
+  margin-bottom: 1.5rem;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.9s 0.1s ease both;
+}
+.hero-title em { color: var(--mint); font-style: normal; }
+.hero-title .line2 { display: block; }
+
+@keyframes fadeUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform:none; } }
+
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.2rem); font-weight: 300;
+  color: rgba(255,255,255,0.65);
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+  animation: fadeUp 0.9s 0.2s ease both;
+}
+
+.hero-buttons {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 3.5rem;
+  animation: fadeUp 0.9s 0.3s ease both;
+}
+.btn-hero-primary {
+  background: var(--mint); color: var(--teal);
+  padding: 0.9rem 2.2rem; border-radius: 999px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500;
+  border: none; cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-hero-primary:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(60,191,163,0.45); }
+.btn-hero-outline {
+  background: transparent; color: var(--white);
+  padding: 0.88rem 2.2rem; border-radius: 999px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 400;
+  border: 1.5px solid rgba(255,255,255,0.3); cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-hero-outline:hover { border-color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.06); }
+
+/* FLOATING CARDS */
+.hero-cards {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.9s 0.4s ease both;
+}
+.hero-card-mini {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border-radius: 16px; padding: 1rem 1.3rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  animation: float 3s ease-in-out infinite;
+}
+.hero-card-mini:nth-child(2) { animation-delay: 0.5s; }
+.hero-card-mini:nth-child(3) { animation-delay: 1s; }
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+.hcm-icon { font-size: 1.8rem; }
+.hcm-text { text-align: left; }
+.hcm-name { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--white); }
+.hcm-tag  { font-size: 0.68rem; color: var(--mint-lt); }
+
+/* SCROLL HINT */
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  font-size: 0.68rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.35); text-transform: uppercase;
+}
+.scroll-line {
+  width: 1px; height: 40px; background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+  animation: scrollAnim 2s ease infinite;
+}
+@keyframes scrollAnim { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+/* ── TRUST STRIP ── */
+.trust-strip {
+  background: var(--white);
+  padding: 1.5rem 3rem;
+  border-bottom: 1px solid var(--gray-lt);
+}
+.trust-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  gap: 3rem; flex-wrap: wrap;
+}
+.trust-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.82rem; font-weight: 500; color: var(--gray);
+}
+.trust-icon { font-size: 1.1rem; }
+.trust-divider { width: 1px; height: 20px; background: var(--gray-lt); }
+
+/* ── STATS ── */
+.stats-section {
+  background: var(--teal);
+  padding: 5rem 3rem;
+}
+.stats-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 3rem; font-weight: 800;
+  color: var(--mint); line-height: 1;
+  margin-bottom: 0.4rem;
+}
+.stat-label { font-size: 0.85rem; color: var(--mint-lt); font-weight: 300; }
+
+/* ── SECTION COMMON ── */
+.section { padding: 6rem 3rem; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-tag {
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--mint);
+  margin-bottom: 0.6rem; display: block;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800; color: var(--teal);
+  letter-spacing: -0.03em; line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.section-sub {
+  font-size: 1rem; color: var(--gray);
+  max-width: 500px; line-height: 1.7;
+  font-weight: 300;
+}
+
+/* ── PRODUCTS ── */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-top: 3rem;
+}
+.product-card {
+  background: var(--white);
+  border-radius: 24px; overflow: hidden;
+  border: 1px solid var(--gray-lt);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+.product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(12,74,70,0.12); }
+
+.product-img {
+  height: 200px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 4.5rem;
+  position: relative; overflow: hidden;
+}
+.product-img::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(12,74,70,0.08), transparent);
+}
+.product-badge {
+  position: absolute; top: 1rem; left: 1rem;
+  font-size: 0.65rem; font-weight: 500; padding: 0.25rem 0.8rem;
+  border-radius: 999px; text-transform: uppercase; letter-spacing: 0.05em; z-index: 1;
+}
+.badge-mint  { background: var(--mint); color: var(--teal); }
+.badge-warm  { background: var(--warm); color: var(--white); }
+.badge-green { background: #D4EDBA; color: #2D6A10; }
+.badge-blue  { background: #D4E5F7; color: #1A4A8A; }
+
+.product-body { padding: 1.4rem; }
+.product-name {
+  font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+  color: var(--teal); margin-bottom: 0.3rem;
+}
+.product-desc { font-size: 0.8rem; color: var(--gray); margin-bottom: 0.9rem; line-height: 1.5; }
+.product-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.product-tag {
+  font-size: 0.65rem; padding: 0.2rem 0.55rem; border-radius: 6px;
+  background: var(--ice); color: var(--teal-mid); font-weight: 500;
+}
+.product-footer {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.product-price {
+  font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--dark);
+}
+.product-per { font-size: 0.72rem; color: var(--gray); }
+.btn-add {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--teal); color: var(--white);
+  border: none; cursor: pointer; font-size: 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+.btn-add:hover { background: var(--teal-mid); transform: scale(1.1); }
+
+/* ── HOW IT WORKS ── */
+.how-section { background: var(--teal); }
+.how-section .section-title { color: var(--white); }
+.how-section .section-sub  { color: var(--mint-lt); }
+.how-section .section-tag  { color: var(--mint); }
+.how-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem; margin-top: 3rem; position: relative;
+}
+.how-connector {
+  position: absolute; top: 48px; left: 12.5%; right: 12.5%;
+  height: 1px; background: rgba(255,255,255,0.12);
+  pointer-events: none;
+}
+.how-connector::after {
+  content: '';
+  position: absolute; top: -3px; right: 0;
+  border: 4px solid transparent;
+  border-left: 6px solid rgba(255,255,255,0.12);
+}
+.how-step {
+  text-align: center; position: relative;
+}
+.how-num {
+  width: 96px; height: 96px; border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem; font-size: 2.2rem;
+  position: relative; z-index: 1;
+  transition: background 0.3s;
+}
+.how-step:hover .how-num { background: rgba(60,191,163,0.2); }
+.how-step-num {
+  position: absolute; top: -6px; right: -6px;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--mint); color: var(--teal);
+  font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.how-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+.how-desc  { font-size: 0.82rem; color: var(--mint-lt); line-height: 1.6; font-weight: 300; }
+
+/* ── WHY US ── */
+.why-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1.5rem; margin-top: 3rem;
+}
+.why-big {
+  grid-row: span 2;
+  background: var(--teal);
+  border-radius: 28px; padding: 3rem;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  min-height: 380px; position: relative; overflow: hidden;
+}
+.why-big-bg {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12rem; opacity: 0.08; pointer-events: none;
+  transform: rotate(-10deg);
+}
+.why-big h3 { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--white); margin-bottom: 0.75rem; line-height: 1.2; position: relative; }
+.why-big p  { font-size: 0.9rem; color: var(--mint-lt); line-height: 1.7; font-weight: 300; position: relative; }
+.why-small {
+  background: var(--white);
+  border-radius: 24px; padding: 2rem;
+  border: 1px solid var(--gray-lt);
+  display: flex; gap: 1.2rem; align-items: flex-start;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.why-small:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(12,74,70,0.09); }
+.why-icon {
+  width: 52px; height: 52px; border-radius: 16px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+}
+.why-text h3 { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--teal); margin-bottom: 0.35rem; }
+.why-text p  { font-size: 0.82rem; color: var(--gray); line-height: 1.6; }
+
+/* ── TESTIMONIALS ── */
+.testi-section { background: var(--ice); }
+.testi-track-wrap { overflow: hidden; position: relative; margin-top: 3rem; }
+.testi-track-wrap::before,
+.testi-track-wrap::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2;
+}
+.testi-track-wrap::before { left: 0; background: linear-gradient(to right, var(--ice), transparent); }
+.testi-track-wrap::after  { right: 0; background: linear-gradient(to left,  var(--ice), transparent); }
+
+.testi-track {
+  display: flex; gap: 1.5rem;
+  animation: scrollTrack 30s linear infinite;
+  width: max-content;
+}
+.testi-track:hover { animation-play-state: paused; }
+@keyframes scrollTrack { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+.testi-card {
+  background: var(--white);
+  border-radius: 20px; padding: 1.8rem;
+  width: 300px; flex-shrink: 0;
+  border: 1px solid var(--gray-lt);
+}
+.testi-stars { color: #F5A623; font-size: 0.85rem; margin-bottom: 0.9rem; }
+.testi-text { font-size: 0.88rem; color: var(--dark); line-height: 1.65; margin-bottom: 1.2rem; font-style: italic; }
+.testi-author { display: flex; align-items: center; gap: 0.75rem; }
+.testi-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700;
+  flex-shrink: 0;
+}
+.testi-name { font-size: 0.82rem; font-weight: 500; color: var(--dark); }
+.testi-loc  { font-size: 0.72rem; color: var(--gray); }
+
+/* ── PROMO BANNER ── */
+.promo-section { padding: 2.5rem 3rem; background: var(--white); border-top: 1px solid var(--gray-lt); }
+.promo-inner {
+  max-width: 1100px; margin: 0 auto;
+  background: var(--warm);
+  border-radius: 24px; padding: 2.5rem 3rem;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2rem; flex-wrap: wrap;
+  position: relative; overflow: hidden;
+}
+.promo-inner::before {
+  content: '❄️';
+  position: absolute; right: 8rem; top: 50%;
+  transform: translateY(-50%) rotate(-15deg);
+  font-size: 8rem; opacity: 0.12; pointer-events: none;
+}
+.promo-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.75); margin-bottom: 0.4rem; }
+.promo-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--white); line-height: 1.2; }
+.promo-code {
+  background: rgba(255,255,255,0.2);
+  border: 1.5px dashed rgba(255,255,255,0.5);
+  padding: 0.5rem 1.4rem; border-radius: 12px;
+  font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700;
+  color: var(--white); letter-spacing: 0.1em; cursor: pointer;
+  transition: background 0.2s; position: relative;
+}
+.promo-code:hover { background: rgba(255,255,255,0.3); }
+.promo-btn {
+  background: var(--white); color: var(--warm);
+  padding: 0.8rem 2rem; border-radius: 999px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
+  border: none; cursor: pointer; white-space: nowrap;
+  transition: transform 0.2s;
+}
+.promo-btn:hover { transform: scale(1.04); }
+
+/* ── CTA SECTION ── */
+.cta-section {
+  padding: 7rem 3rem;
+  background: var(--teal);
+  text-align: center; position: relative; overflow: hidden;
+}
+.cta-bg {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(60,191,163,0.12) 1.5px, transparent 1.5px);
+  background-size: 30px 30px;
+}
+.cta-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+.cta-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800; color: var(--white);
+  letter-spacing: -0.03em; line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.cta-title em { color: var(--mint); font-style: normal; }
+.cta-sub { font-size: 1rem; color: var(--mint-lt); font-weight: 300; margin-bottom: 2.5rem; line-height: 1.7; }
+.email-form {
+  display: flex; gap: 0.75rem; max-width: 440px; margin: 0 auto;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 999px; padding: 0.4rem 0.4rem 0.4rem 1.4rem;
+}
+.email-input {
+  flex: 1; background: transparent; border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+  color: var(--white); outline: none;
+}
+.email-input::placeholder { color: rgba(255,255,255,0.4); }
+.email-btn {
+  background: var(--mint); color: var(--teal);
+  padding: 0.7rem 1.6rem; border-radius: 999px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500;
+  border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; white-space: nowrap;
+}
+.email-btn:hover { transform: scale(1.04); box-shadow: 0 4px 20px rgba(60,191,163,0.4); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--dark);
+  padding: 4rem 3rem 2rem;
+}
+.footer-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem; margin-bottom: 3rem;
+}
+.footer-brand {}
+.footer-logo {
+  font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800;
+  color: var(--white); letter-spacing: -0.03em; margin-bottom: 0.75rem;
+}
+.footer-logo span { color: var(--mint); }
+.footer-desc { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.7; max-width: 240px; margin-bottom: 1.5rem; }
+.footer-socials { display: flex; gap: 0.6rem; }
+.social-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; cursor: pointer; text-decoration: none;
+  transition: background 0.2s;
+}
+.social-btn:hover { background: rgba(60,191,163,0.2); }
+.footer-col h4 { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--white); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1.2rem; }
+.footer-col a  { display: block; font-size: 0.83rem; color: rgba(255,255,255,0.45); text-decoration: none; margin-bottom: 0.6rem; transition: color 0.2s; }
+.footer-col a:hover { color: var(--mint); }
+.footer-bottom {
+  max-width: 1100px; margin: 0 auto;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.75rem; color: rgba(255,255,255,0.3);
+}
+.footer-badges { display: flex; gap: 0.6rem; }
+.f-badge {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5); padding: 0.25rem 0.65rem; border-radius: 6px;
+  font-size: 0.68rem; font-weight: 500;
+}
+
+/* ── CART TOAST ── */
+.toast {
+  position: fixed; bottom: 2rem; right: 2rem;
+  background: var(--teal);
+  border: 1px solid rgba(60,191,163,0.3);
+  color: var(--white); padding: 1rem 1.4rem;
+  border-radius: 16px; font-size: 0.85rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  z-index: 1000; transform: translateY(100px);
+  transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275), opacity 0.3s;
+  opacity: 0; pointer-events: none;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.toast.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
+.toast-icon { font-size: 1.2rem; }
+
+/* SNOWFLAKE PARTICLES */
+.snowflake {
+  position: absolute;
+  color: rgba(60,191,163,0.35);
+  font-size: inherit;
+  pointer-events: none;
+  animation: snowFall linear infinite;
+}
+@keyframes snowFall {
+  0%   { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 1.1rem 1.5rem; }
+  nav.scrolled { padding: 0.85rem 1.5rem; }
+  .nav-links { display: none; }
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .how-grid { grid-template-columns: repeat(2, 1fr); }
+  .why-grid { grid-template-columns: 1fr; }
+  .why-big { grid-row: span 1; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .section { padding: 4rem 1.5rem; }
+  .promo-inner { padding: 2rem; }
+  .promo-inner::before { display: none; }
+}
+@media (max-width: 600px) {
+  .products-grid { grid-template-columns: 1fr; }
+  .how-grid { grid-template-columns: 1fr; }
+  .how-connector { display: none; }
+  .footer-inner { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon">🛒</span>
+  <div><strong id="toastName">Healty Chicken</strong> ditambahkan ke keranjang!</div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg width="20" height="20" viewBox="0 0 52 52" fill="none">
+        <line x1="26" y1="4" x2="26" y2="48" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="4" y1="26" x2="48" y2="26" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="10" y1="10" x2="42" y2="42" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="42" y1="10" x2="10" y2="42" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="26" y1="13" x2="19" y2="7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <line x1="26" y1="13" x2="33" y2="7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <line x1="39" y1="26" x2="45" y2="19" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <line x1="39" y1="26" x2="45" y2="33" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="26" cy="26" r="5" fill="white"/>
+      </svg>
+    </div>
+    Froze<span>nly</span>
+  </a>
+  <div class="nav-links">
+    <a href="#produk">Produk</a>
+    <a href="#cara-kerja">Cara Kerja</a>
+    <a href="#keunggulan">Keunggulan</a>
+    <a href="#ulasan">Ulasan</a>
+    <a href="#" class="nav-cta">Belanja Sekarang →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-glow"></div>
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    Sekarang tersedia di Jabodetabek, Bandung & Surabaya
+  </div>
+
+  <h1 class="hero-title">
+    Frozen fresh,
+    <span class="line2"><em>made honest.</em></span>
+  </h1>
+
+  <p class="hero-sub">
+    Bahan frozen premium — ayam organik, seafood segar, sayuran beku —
+    tanpa satu pun pengawet buatan. Langsung ke freezermu.
+  </p>
+
+  <div class="hero-buttons">
+    <a href="#produk" class="btn-hero-primary">
+      Lihat Produk &nbsp;→
+    </a>
+    <a href="#cara-kerja" class="btn-hero-outline">
+      Cara Kerja ↓
+    </a>
+  </div>
+
+  <div class="hero-cards">
+    <div class="hero-card-mini">
+      <div class="hcm-icon">🍗</div>
+      <div class="hcm-text">
+        <div class="hcm-name">Healty Chicken</div>
+        <div class="hcm-tag">Tanpa pengawet · Rp 48.000/500g</div>
+      </div>
+    </div>
+    <div class="hero-card-mini">
+      <div class="hcm-icon">🐟</div>
+      <div class="hcm-text">
+        <div class="hcm-name">Salmon Slice</div>
+        <div class="hcm-tag">Wild caught · Rp 89.000/300g</div>
+      </div>
+    </div>
+    <div class="hero-card-mini">
+      <div class="hcm-icon">🥦</div>
+      <div class="hcm-text">
+        <div class="hcm-name">Sayur Organik</div>
+        <div class="hcm-tag">Flash frozen · Rp 32.000/400g</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="trust-inner">
+    <div class="trust-item"><span class="trust-icon">✅</span> Tanpa Pengawet Buatan</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><span class="trust-icon">🕌</span> Sertifikasi Halal MUI</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><span class="trust-icon">🧊</span> Pengiriman Cold Chain</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><span class="trust-icon">🏭</span> Fasilitas BPOM Bersertifikat</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><span class="trust-icon">🚚</span> Gratis Ongkir Min. Rp 150.000</div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <div class="stat-num" data-target="15000">0</div>
+      <div class="stat-label">Pelanggan Aktif</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <div class="stat-num" data-target="98">0<span>%</span></div>
+      <div class="stat-label">Kepuasan Pelanggan</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <div class="stat-num" data-target="0">0 <span style="font-size:1.5rem">pengawet</span></div>
+      <div class="stat-label">Bebas Bahan Pengawet</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <div class="stat-num" data-target="50">0<span>+</span></div>
+      <div class="stat-label">Jenis Produk Tersedia</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="section" id="produk" style="background:var(--white);">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-tag">02 — Produk Unggulan</span>
+      <h2 class="section-title">Pilih yang terbaik<br>untuk keluargamu</h2>
+      <p class="section-sub">Semua produk dipilih ketat, diproses higienis, dan dibekukan segera untuk menjaga kualitas alaminya.</p>
+    </div>
+
+    <div class="products-grid">
+      <div class="product-card reveal reveal-delay-1">
+        <div class="product-img" style="background:linear-gradient(145deg,#E0F5F0,#B8EAE0)">
+          🍗
+          <div class="product-badge badge-mint">Bestseller</div>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Healty Chicken Breast</div>
+          <div class="product-desc">Dada ayam kampung tanpa kulit, dipilih dari peternak organik lokal.</div>
+          <div class="product-tags">
+            <span class="product-tag">Tanpa Pengawet</span>
+            <span class="product-tag">Halal</span>
+            <span class="product-tag">Tinggi Protein</span>
+          </div>
+          <div class="product-footer">
+            <div>
+              <div class="product-price">Rp 48.000</div>
+              <div class="product-per">per 500g</div>
+            </div>
+            <button class="btn-add" onclick="addToCart('Healty Chicken Breast')">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-2">
+        <div class="product-img" style="background:linear-gradient(145deg,#FFF0E6,#FDDCC4)">
+          🐟
+          <div class="product-badge badge-warm">New</div>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Salmon Slice Premium</div>
+          <div class="product-desc">Irisan salmon segar, flash-frozen dalam 4 jam setelah panen.</div>
+          <div class="product-tags">
+            <span class="product-tag">Omega-3</span>
+            <span class="product-tag">Wild Caught</span>
+            <span class="product-tag">No Dye</span>
+          </div>
+          <div class="product-footer">
+            <div>
+              <div class="product-price">Rp 89.000</div>
+              <div class="product-per">per 300g</div>
+            </div>
+            <button class="btn-add" onclick="addToCart('Salmon Slice Premium')">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-3">
+        <div class="product-img" style="background:linear-gradient(145deg,#EEF8E5,#D2EDB0)">
+          🥦
+          <div class="product-badge badge-green">Plant-Based</div>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Mix Veggie Organik</div>
+          <div class="product-desc">Brokoli, wortel, jagung manis — blanched dan langsung dibekukan.</div>
+          <div class="product-tags">
+            <span class="product-tag">Organik</span>
+            <span class="product-tag">Vitamin Terjaga</span>
+            <span class="product-tag">Low Cal</span>
+          </div>
+          <div class="product-footer">
+            <div>
+              <div class="product-price">Rp 32.000</div>
+              <div class="product-per">per 400g</div>
+            </div>
+            <button class="btn-add" onclick="addToCart('Mix Veggie Organik')">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-4">
+        <div class="product-img" style="background:linear-gradient(145deg,#E6EEF8,#C2D4F0)">
+          🥩
+          <div class="product-badge badge-blue">Premium</div>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Beef Slice Wagyu Local</div>
+          <div class="product-desc">Irisan daging sapi wagyu lokal, marbling sempurna untuk semua masakan.</div>
+          <div class="product-tags">
+            <span class="product-tag">Halal MUI</span>
+            <span class="product-tag">Marbling A3</span>
+            <span class="product-tag">No Additive</span>
+          </div>
+          <div class="product-footer">
+            <div>
+              <div class="product-price">Rp 145.000</div>
+              <div class="product-per">per 300g</div>
+            </div>
+            <button class="btn-add" onclick="addToCart('Beef Slice Wagyu Local')">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:2.5rem;" class="reveal">
+      <a href="#" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.85rem 2.4rem;background:var(--teal);color:var(--white);border-radius:999px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:500;text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.04)';this.style.boxShadow='0 8px 30px rgba(12,74,70,0.25)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        Lihat Semua 50+ Produk &nbsp;→
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-section" id="cara-kerja">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-tag">03 — Cara Kerja</span>
+      <h2 class="section-title">Dari peternak ke<br>freezermu, sesimpel itu.</h2>
+      <p class="section-sub">Kami memotong perantara dan menjaga rantai dingin di setiap langkah.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-connector"></div>
+      <div class="how-step reveal reveal-delay-1">
+        <div class="how-num">
+          🌱
+          <div class="how-step-num">1</div>
+        </div>
+        <div class="how-title">Seleksi Ketat</div>
+        <div class="how-desc">Tim kami mengunjungi dan menyeleksi peternak & petani mitra yang memenuhi standar organik Frozenly.</div>
+      </div>
+      <div class="how-step reveal reveal-delay-2">
+        <div class="how-num">
+          🏭
+          <div class="how-step-num">2</div>
+        </div>
+        <div class="how-title">Proses Higienis</div>
+        <div class="how-desc">Dipotong dan diproses di fasilitas bersertifikat BPOM & Halal MUI. Tanpa bahan tambahan apapun.</div>
+      </div>
+      <div class="how-step reveal reveal-delay-3">
+        <div class="how-num">
+          ❄️
+          <div class="how-step-num">3</div>
+        </div>
+        <div class="how-title">Flash Frozen</div>
+        <div class="how-desc">Dibekukan dalam hitungan jam menggunakan teknologi IQF (Individually Quick Frozen) untuk menjaga nutrisi.</div>
+      </div>
+      <div class="how-step reveal reveal-delay-4">
+        <div class="how-num">
+          🚚
+          <div class="how-step-num">4</div>
+        </div>
+        <div class="how-title">Kirim Cold Chain</div>
+        <div class="how-desc">Dikirim dalam dry ice & insulated box. Dijamin sampai beku sempurna atau uang kembali 100%.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="section" id="keunggulan" style="background:var(--cream)">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-tag">04 — Keunggulan</span>
+      <h2 class="section-title">Kenapa pilih<br>Frozenly?</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-big reveal">
+        <div class="why-big-bg">🧊</div>
+        <h3>Nol Pengawet.<br>Bukan marketing,<br>ini janji kami.</h3>
+        <p>Setiap produk melewati lab test internal sebelum dikirim. Kami publish hasilnya. Transparansi bukan opsi — ini standar kami.</p>
+      </div>
+      <div class="why-small reveal reveal-delay-1">
+        <div class="why-icon" style="background:var(--ice)">🏆</div>
+        <div class="why-text">
+          <h3>Kualitas Terjamin</h3>
+          <p>Garansi uang kembali jika produk tidak sesuai. Tanpa pertanyaan, tanpa ribet.</p>
+        </div>
+      </div>
+      <div class="why-small reveal reveal-delay-2">
+        <div class="why-icon" style="background:var(--warm-lt)">⚡</div>
+        <div class="why-text">
+          <h3>Praktis & Hemat Waktu</h3>
+          <p>Tinggal ambil dari freezer, masak. Tidak perlu cuci, tidak perlu potong. Siap dalam 10 menit.</p>
+        </div>
+      </div>
+      <div class="why-small reveal reveal-delay-1">
+        <div class="why-icon" style="background:var(--ice)">🌿</div>
+        <div class="why-text">
+          <h3>Mendukung Lokal</h3>
+          <p>100% produk kami dari peternak dan petani Indonesia. Kamu beli, mereka sejahtera.</p>
+        </div>
+      </div>
+      <div class="why-small reveal reveal-delay-2">
+        <div class="why-icon" style="background:var(--warm-lt)">📦</div>
+        <div class="why-text">
+          <h3>Packaging Ramah Lingkungan</h3>
+          <p>Box pengiriman kami dari bahan daur ulang. Insulated liner-nya bisa dikembalikan.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section testi-section" id="ulasan">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center; margin-bottom:0;">
+      <span class="section-tag" style="display:block;text-align:center;">05 — Ulasan Pelanggan</span>
+      <h2 class="section-title" style="text-align:center;">Mereka sudah buktikan.</h2>
+      <p class="section-sub" style="text-align:center;margin:0 auto;">Lebih dari 15.000 keluarga Indonesia sudah percaya Frozenly.</p>
+    </div>
+  </div>
+  <div class="testi-track-wrap" style="margin-top:3rem;">
+    <div class="testi-track" id="testiTrack"></div>
+  </div>
+</section>
+
+<!-- PROMO -->
+<div class="promo-section">
+  <div class="promo-inner reveal">
+    <div>
+      <div class="promo-label">Promo Pertama Order</div>
+      <div class="promo-title">Diskon 20% untuk<br>order pertamamu 🎉</div>
+    </div>
+    <div>
+      <div style="font-size:0.72rem;color:rgba(255,255,255,0.7);margin-bottom:0.4rem;">Pakai kode:</div>
+      <div class="promo-code" id="promoCode" onclick="copyCode()">FROZENLY20</div>
+    </div>
+    <button class="promo-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">Belanja Sekarang →</button>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg"></div>
+  <div class="cta-inner">
+    <div class="reveal">
+      <h2 class="cta-title">
+        Mulai hidup lebih sehat,<br>
+        <em>dari freezermu.</em>
+      </h2>
+      <p class="cta-sub">
+        Daftar sekarang dan dapatkan notifikasi produk baru, promo eksklusif,
+        dan tips memasak sehat tiap minggu.
+      </p>
+    </div>
+    <div class="email-form reveal reveal-delay-1">
+      <input type="email" class="email-input" placeholder="emailmu@gmail.com" id="emailInput">
+      <button class="email-btn" onclick="subscribeEmail()">Daftar Gratis →</button>
+    </div>
+    <p style="font-size:0.72rem;color:rgba(255,255,255,0.3);margin-top:1rem;" class="reveal reveal-delay-2">
+      Tidak ada spam. Unsubscribe kapan saja.
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">Froze<span>nly</span>.</div>
+      <p class="footer-desc">Bahan frozen sehat untuk keluarga Indonesia yang aktif dan peduli kualitas.</p>
+      <div class="footer-socials">
+        <a class="social-btn" href="#" title="Instagram">📷</a>
+        <a class="social-btn" href="#" title="TikTok">📱</a>
+        <a class="social-btn" href="#" title="WhatsApp">💬</a>
+        <a class="social-btn" href="#" title="Shopee">🛍️</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Produk</h4>
+      <a href="#">Healty Chicken</a>
+      <a href="#">Seafood Segar</a>
+      <a href="#">Sayuran Beku</a>
+      <a href="#">Daging Pilihan</a>
+      <a href="#">Paket Bundling</a>
+    </div>
+    <div class="footer-col">
+      <h4>Perusahaan</h4>
+      <a href="#">Tentang Kami</a>
+      <a href="#">Blog & Resep</a>
+      <a href="#">Mitra Peternak</a>
+      <a href="#">Karier</a>
+      <a href="#">Hubungi Kami</a>
+    </div>
+    <div class="footer-col">
+      <h4>Bantuan</h4>
+      <a href="#">FAQ</a>
+      <a href="#">Cara Order</a>
+      <a href="#">Pengiriman</a>
+      <a href="#">Kebijakan Retur</a>
+      <a href="#">Syarat & Ketentuan</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2025 Frozenly. Frozen fresh, made honest.</div>
+    <div class="footer-badges">
+      <span class="f-badge">BPOM ✓</span>
+      <span class="f-badge">Halal MUI ✓</span>
+      <span class="f-badge">ISO 22000</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── CURSOR
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+});
+function animateRing() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+document.querySelectorAll('a,button,.product-card,.why-small,.btn-add').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2)'; ring.style.opacity = '0'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.opacity = '0.5'; });
+});
+
+// ── NAV SCROLL
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ── REVEAL ON SCROLL
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── COUNTER ANIMATION
+function animateCounters() {
+  document.querySelectorAll('.stat-num[data-target]').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const suffix = el.innerHTML.replace(/[0-9]/g,'').replace('0','');
+    let count = 0;
+    const step = Math.ceil(target / 60);
+    const timer = setInterval(() => {
+      count = Math.min(count + step, target);
+      el.innerHTML = count.toLocaleString('id') + suffix;
+      if (count >= target) clearInterval(timer);
+    }, 25);
+  });
+}
+const statsObs = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) { animateCounters(); statsObs.disconnect(); }
+}, { threshold: 0.5 });
+const statsEl = document.querySelector('.stats-section');
+if (statsEl) statsObs.observe(statsEl);
+
+// ── SNOWFLAKE PARTICLES (CANVAS)
+const canvas = document.getElementById('heroCanvas');
+const ctx = canvas.getContext('2d');
+let flakes = [];
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function createFlake() {
+  return {
+    x: Math.random() * canvas.width,
+    y: -20,
+    size: Math.random() * 12 + 6,
+    speed: Math.random() * 0.6 + 0.3,
+    opacity: Math.random() * 0.3 + 0.05,
+    rotation: 0,
+    rotSpeed: (Math.random() - 0.5) * 0.02,
+    arms: Math.random() > 0.5 ? 6 : 4,
+  };
+}
+for (let i = 0; i < 28; i++) {
+  const f = createFlake(); f.y = Math.random() * canvas.height; flakes.push(f);
+}
+function drawSnowflake(f) {
+  ctx.save();
+  ctx.translate(f.x, f.y);
+  ctx.rotate(f.rotation);
+  ctx.strokeStyle = `rgba(60,191,163,${f.opacity})`;
+  ctx.lineWidth = 0.8;
+  ctx.lineCap = 'round';
+  const n = f.arms;
+  for (let i = 0; i < n; i++) {
+    ctx.save(); ctx.rotate((i / n) * Math.PI * 2);
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(0, -f.size); ctx.stroke();
+    ctx.save(); ctx.translate(0, -f.size * 0.6);
+    ctx.beginPath(); ctx.moveTo(-f.size*0.22,0); ctx.lineTo(f.size*0.22,0); ctx.stroke();
+    ctx.restore(); ctx.restore();
+  }
+  ctx.beginPath(); ctx.arc(0,0,f.size*0.12,0,Math.PI*2);
+  ctx.fillStyle = `rgba(60,191,163,${f.opacity*1.5})`; ctx.fill();
+  ctx.restore();
+}
+function animateFlakes() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  flakes.forEach((f,i) => {
+    f.y += f.speed; f.rotation += f.rotSpeed;
+    drawSnowflake(f);
+    if (f.y > canvas.height + 30) flakes[i] = createFlake();
+  });
+  requestAnimationFrame(animateFlakes);
+}
+animateFlakes();
+
+// ── TESTIMONIALS
+const testimonials = [
+  { stars:5, text:"Ayamnya beneran beda banget dari yang di supermarket! Lebih gurih, lebih segar, dan seneng banget nggak ada bau pengawet. Keluarga langsung suka.", name:"Rina Kusuma", loc:"Ibu Rumah Tangga · Jakarta Selatan", color:"#E2F5F2", textColor:"#0C4A46" },
+  { stars:5, text:"Salmon-nya premium banget untuk harga segitu. Anak-anak doyan, dan saya nggak khawatir karena beneran fresh. Pengiriman juga cepat dan tetap beku!", name:"David Santoso", loc:"Chef Home Cook · Surabaya", color:"#FDE8D5", textColor:"#7A3A10" },
+  { stars:5, text:"Akhirnya ada yang jual bahan beku tapi serius soal kualitas. Label bahan-bahannya jelas, transparent, dan memang beneran tanpa pengawet.", name:"dr. Maya Putri", loc:"Dokter & Ibu Dua Anak · Bandung", color:"#E2F5F2", textColor:"#0C4A46" },
+  { stars:4, text:"Paket bundling weekly-nya worth it banget! Stok bahan masak seminggu langsung beres. Nggak perlu bolak-balik ke pasar lagi.", name:"Budi Hartono", loc:"Work From Home Dad · Depok", color:"#EEF8E5", textColor:"#2D6A10" },
+  { stars:5, text:"Udah langganan 6 bulan dan belum pernah kecewa. Kualitas konsisten, packaging aman, dan CS-nya responsif banget kalau ada pertanyaan.", name:"Sari Dewi", loc:"Food Blogger · Bekasi", color:"#FDE8D5", textColor:"#7A3A10" },
+  { stars:5, text:"Sebagai orang yang concern sama kesehatan, ini jawaban impian! Beef slice wagyu lokalnya juara — marbling bagus, harga masih masuk akal.", name:"Arif Rahman", loc:"Fitness Enthusiast · Tangerang", color:"#E2F5F2", textColor:"#0C4A46" },
+  { stars:5, text:"Sayuran bekunya lebih bergizi dari yang saya kira. Warna tetap cerah setelah dimasak, rasanya masih segar. Proses blanching-nya ketahuan kualitasnya.", name:"Prof. Lina Sari", loc:"Ahli Gizi · Yogyakarta", color:"#EEF8E5", textColor:"#2D6A10" },
+];
+
+function buildTestimonials() {
+  const track = document.getElementById('testiTrack');
+  const doubled = [...testimonials, ...testimonials];
+  doubled.forEach(t => {
+    const stars = '★'.repeat(t.stars) + '☆'.repeat(5 - t.stars);
+    const initials = t.name.split(' ').slice(0,2).map(w => w[0]).join('');
+    const card = document.createElement('div');
+    card.className = 'testi-card';
+    card.innerHTML = `
+      <div class="testi-stars">${stars}</div>
+      <p class="testi-text">"${t.text}"</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:${t.color};color:${t.textColor}">${initials}</div>
+        <div>
+          <div class="testi-name">${t.name}</div>
+          <div class="testi-loc">${t.loc}</div>
+        </div>
+      </div>
+    `;
+    track.appendChild(card);
+  });
+}
+buildTestimonials();
+
+// ── ADD TO CART
+let cartCount = 0;
+function addToCart(name) {
+  cartCount++;
+  const toast = document.getElementById('toast');
+  document.getElementById('toastName').textContent = name;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ── COPY CODE
+function copyCode() {
+  navigator.clipboard.writeText('FROZENLY20').catch(() => {});
+  const el = document.getElementById('promoCode');
+  el.textContent = 'Tersalin! ✓';
+  setTimeout(() => el.textContent = 'FROZENLY20', 2000);
+}
+
+// ── SUBSCRIBE
+function subscribeEmail() {
+  const input = document.getElementById('emailInput');
+  const val = input.value.trim();
+  if (!val || !val.includes('@')) { input.style.background = 'rgba(245,146,78,0.2)'; return; }
+  input.style.background = '';
+  addToCart('Newsletter — ' + val.split('@')[0]);
+  input.value = '';
+}
+</script>
+</body>
+</html>
